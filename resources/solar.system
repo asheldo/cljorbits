@@ -1,0 +1,12 @@
+;; Rect coordinates: could use vernal equinox position of earth
+;;  as x=0
+
+
+{ name "solar.system"
+  units {d "km" t "hour"}
+  ;; id and rect coord at earth vernal equinox
+  objects [
+  {ix 1 id "sun" rect [0 0 0] v [0 0 0] rot 0 }
+   {ix 2 id "mercury" rect [0 1e7 0] v [6000 0 0] rot 2}
+   ]
+   }
