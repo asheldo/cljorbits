@@ -1,65 +1,31 @@
-(ns cljorbits.planet
-  (:require
-    [cljorbits.systems.solar.sun :as sun]
-    [cljorbits.systems.solar.mercury :as mercury]
-    [cljorbits.systems.solar.venus :as venus]
-    [cljorbits.systems.solar.earth :as earth]
-    [cljorbits.systems.solar.mars :as mars]
-    [cljorbits.systems.solar.jupiter :as jupiter]
-    [cljorbits.systems.solar.saturn :as saturn]
-    [cljorbits.systems.solar.neptune :as neptune]
-    [cljorbits.systems.solar.uranus :as uranus]
-    [cljorbits.systems.solar.comet :as comet]
-    ))
+(ns cljorbits.planet)
 
-(defn make-planet [app id name]
-  {:type :planet
-   :name name :id id
-   :curr-pos (atom [0, 0, 0] )
-   :props (atom {})}
-  )
+(declare make-sinusoidal-dims)
 
-(defn make-sun [app id name]
-  {:type :sun
-   :name name :id id
-   :curr-pos (atom [0, 0, 0] )
-   :props (atom {})}
-  )
+(defn make-sinusoidal-orbit [app sys p]
+  (let [period (:period-hours p)
+        semi-major (:semi-major-kms p)
+        semi-minor (:semi-minor-kms p)
+        ecc (:eccentricity p)
+        inc (:inclination-rad p)
+        sinus-x-y (make-sinusoidal-dims period semi-major semi-minor)]
+    [sinus-x-y]))
 
-(defn make-comet [app id name]
-  {:type :planetessimal
-   :class :comet
-   :name name :id id
-   :curr-pos (atom [0, 0, 0] )
-   :props (atom {})}
-  )
-
-; TODO refactor for different "type" of system?
-(defn make-position-for [app sys type make-for]
-  (let [name (make-for :name)]
-    (case name
-      ; center
-      :sun (sun/make-position app sys)
-
-      ; terrestrial
-      :mercury (mercury/make-position app sys)
-      :venus (venus/make-position app sys)
-      :earth (earth/make-position app sys)
-      :mars (mars/make-position app sys)
-
-      ; giant
-      :jupiter (jupiter/make-position app sys)
-      :saturn (saturn/make-position app sys)
-      :neptune (neptune/make-position app sys)
-      :pluto (uranus/make-position app sys)
-
-      ; default e.g. [:comet :xyz] = class + name
-      (comet/make-position app sys name)
-      )))
-
-(defn make-positions-for [app sys type]
-  (let [make-for-coll (sys type)]
-    (map #(make-position-for app sys type %) make-for-coll))
-  )
-
-; :planetessimals (planet/make-positions-for app sys :planetessimals)}
+(defn make-sinusoidal-dims [period-hours semi-major-km semi-minor-km]
+  "At 0 hour, let's do ...? major = +semi , minor = 0."
+  (let [hours-per-radian (/ period-hours (* Math/PI 2.0))   ; e.g. 24h -> 3.81971
+        major-sinus-fn
+        (fn [hour] "Over period/2 sin goes -1:1 for rad -PI/2:PI/2; "
+          (let [rads (/ hour hours-per-radian)
+                sin (Math/cos rads)
+                major-axis-pos (* sin semi-major-km)]
+            major-axis-pos))
+        minor-sinus-fn
+        (fn [hour]
+          (let [rads (/ hour hours-per-radian)
+                sin (Math/sin rads)
+                minor-axis-pos (* sin semi-minor-km)]
+            minor-axis-pos))
+        ]
+    {:major-axis-sinus-fn major-sinus-fn :minor-axis-sinus-fn minor-sinus-fn
+     :hours-per-radian hours-per-radian }))

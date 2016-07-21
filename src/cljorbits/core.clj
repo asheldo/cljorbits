@@ -9,8 +9,8 @@
         ss (sys/make-system-of-type app :planetary :terrestrial-solar)
         pos (sys/make-positions-for app ss)
         steps 1
-        next-pos (sys/move-planets app ss pos steps)]
-    (println "Hello, World: " (ss :id))
-    (println "You're at " (pprint next-pos))
+        next-pos (sys/move-orbits app ss pos steps)]
+    (println "Hello, World: " (:id ss))
+    (println "You're at " (str next-pos))
     )
 )

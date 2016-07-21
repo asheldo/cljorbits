@@ -1,12 +1,28 @@
-;; Rect coordinates: could use vernal equinox position of earth
-;;  as x=0
+{ :name "solar.system"
+  :reference-utc "2016-07-18 23:59:59"
+  :objects
+  {
+  :fixed [
+   {:ix 1 :name "sun" :odm
+   {:opm nil }
+   {:omm :mya 0 :rotat-rad 1 :period 0 :semi-major-au 0 :semi-minor-au 0  }
+   {:oem nil }
+   }
+   ]
 
+  :planets [
+   {:ix 1 :name "mercury" :rotat-rad 2 :ecc-obl-prec { }
+   :orbits [ { :mya 0 :semi-major-au 0.3 :semi-minor-au 0.3 :rect-ref-au [0.3 0 0] :period-h 2400 :km-hour 800. }]
+   }
+   {:ix 1 :name "venus" :rotat-rad 2 :ecc-obl-prec { }
+   :orbits [ { :mya 0 :semi-major-au 0.58 :semi-minor-au 0.6 :rect-ref-au [0.6 0 0] :period 4800 :km-hour 800. }]
+   }
+   {:ix 1 :name "earth" :rotat-rad 2 :ecc-obl-prec { }
+   :orbits [ { :mya 0 :semi-major-au 0.98 :semi-minor-au 0.92 :rect-ref-au [0.92 0 0] :period (365*24) :km-hour 800. }]
+   }
+    ]
 
-{ name "solar.system"
-  units {d "km" t "hour"}
-  ;; id and rect coord at earth vernal equinox
-  objects [
-  {ix 1 id "sun" rect [0 0 0] v [0 0 0] rot 0 }
-   {ix 2 id "mercury" rect [0 1e7 0] v [6000 0 0] rot 2}
+   :comets [
    ]
    }
+}
