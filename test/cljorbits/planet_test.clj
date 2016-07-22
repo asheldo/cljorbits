@@ -9,8 +9,8 @@
 
 (deftest make-sinusoidal-dims-test
   (testing "planet/make-sinusoidal-dims"
-    (is (= 3 (count (make-sinusoidal-dims 24 1.0 1.0))))
+    (is (= 6 (count (make-sinusoidal-dims 24 1.0 1.0 0))))
     (is (> 1500
-           (:hours-per-radian (make-sinusoidal-dims (* 24 365) 63e7 63e7))
+           (:hours-per-radian (make-sinusoidal-dims (* 24 365) 63e7 63e7 0))
            1000))))
 
