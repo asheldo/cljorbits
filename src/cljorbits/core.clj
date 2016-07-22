@@ -12,5 +12,5 @@
         next-pos (sys/move-orbits app ss pos steps)]
     (println "Hello, World: " (:id ss))
     (println "You're at " (str next-pos))
-    )
+    next-pos)
 )
