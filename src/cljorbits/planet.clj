@@ -7,15 +7,15 @@
     planet                                                  ; <- then
     (assoc planet                                           ; <- else
       :sinusoidal-orbit
-      (make-sinusoidal-dims (:period-hours planet)
-                            (:semi-major-kms planet)
-                            (:semi-minor-kms planet)
-                            ; ecc (:eccentricity planet)
-                            (:inclination-deg planet)))))
+      (make-sinusoidal-dims planet))))
 
-(defn make-sinusoidal-dims [period-hr semi-major-km semi-minor-km inclination-deg]
+(defn make-sinusoidal-dims [planet]
   "At 0 hour, let's do ...? major = +semi , minor = 0."
-  (let [hours-per-rad (/ period-hr (* Math/PI 2.0))   ; e.g. 24h -> 3.81971
+  (let [period-hr (:period-hours planet)
+        semi-major-km (:semi-major-kms planet)
+        semi-minor-km (:semi-minor-kms planet)
+        inclination-deg (:inclination-deg planet)
+        hours-per-rad (/ period-hr (* Math/PI 2.0))   ; e.g. 24h -> 3.81971
         inclin-rad (/ inclination-deg (/ 180 Math/PI))      ; e.g. 180 deg -> 3.14~ rad see Math/toRadians
         semi-major-part (if (zero? inclin-rad)
                           1. (Math/cos inclin-rad)) ; merc = 99%
@@ -44,3 +44,16 @@
         x-fn (:minor-axis-sinus-fn planet)
         x (x-fn time-hour)]
     [x y z]))
+
+(defn add-update-orbit-params [planets-vec]
+  "for now promote year 0 orbit to top-level; also assoc b = a * roundness"
+  (for [planet planets-vec]
+    (let [planet-orbit (get-in planet
+                               [:orbits-mya 0.0])
+          e-sqr (Math/pow (:eccentricity planet-orbit) 2)
+          roundness (Math/sqrt (- 1 e-sqr))
+          planet-parameterized (merge planet planet-orbit)]                ; = (1-ecc^2)^0.5
+      (assoc planet-parameterized
+        :semi-minor-axis-km (* (:semi-major-axis-km planet-orbit)
+                               roundness)
+        :roundness roundness))))

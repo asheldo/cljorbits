@@ -10,15 +10,22 @@
    }
    ]
 
-  :planets [
+  :planets
+  [
    {:ix 1 :name "mercury" :rotat-rad 2 :ecc-obl-prec { }
-   :orbits [ { :mya 0 :semi-major-au 0.3 :semi-minor-au 0.3 :rect-ref-au [0.3 0 0] :period-h 2400 :km-hour 800. }]
+   :orbits [ { :mya 0
+            :semi-major-axis-km 0.3 :semi-minor-axis-km 0.3 :period-hours (* 100 24)
+            :inclination-deg 7 } ]
    }
    {:ix 1 :name "venus" :rotat-rad 2 :ecc-obl-prec { }
-   :orbits [ { :mya 0 :semi-major-au 0.58 :semi-minor-au 0.6 :rect-ref-au [0.6 0 0] :period 4800 :km-hour 800. }]
+   :orbits [ { :mya 0
+            :semi-major-axis-km 0.3 :semi-minor-axis-km 0.3 :period-hours (* 100 24)
+            :inclination-deg 7 } ]
    }
    {:ix 1 :name "earth" :rotat-rad 2 :ecc-obl-prec { }
-   :orbits [ { :mya 0 :semi-major-au 0.98 :semi-minor-au 0.92 :rect-ref-au [0.92 0 0] :period (365*24) :km-hour 800. }]
+   :orbits [ { :mya 0
+            :semi-major-axis-km 1 :semi-minor-axis-km .99 :period-hours (* 365.25 24)
+            :inclination-deg 0 } ]
    }
     ]
 
